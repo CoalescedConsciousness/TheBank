@@ -1,24 +1,24 @@
-﻿*** Bank Application ***
+﻿### Bank Application
 
-** Changelog **
+## Changelog
 - [0.0.1]
-Added Classes: Program, Bank and Account
+  - Added Classes: Program, Bank and Account
 
-Program Methods:
-- Program (mostly empty)
-- Run (Initiator)
-- Menu (Menu for further functionality and useability)
-- Select (Separate method called based on user-selection during Menu())
+    - Program Methods:
+      - Program (mostly empty)
+      - Run (Initiator)
+      - Menu (Menu for further functionality and useability)
+      - Select (Separate method called based on user-selection during Menu())
 
-Bank Methods:
-- CreateAccount (establishes account, with name, and optionally with initial balance)
-- Deposit (deposits a decimal value to the accounts balance, and informs the user of the changes)
-- Withdraw (as above, but withdraws rather than deposits)
-- Balance (Shows the current balance of the account)
+    - Bank Methods:
+      - CreateAccount (establishes account, with name, and optionally with initial balance)
+      - Deposit (deposits a decimal value to the accounts balance, and informs the user of the changes)
+      - Withdraw (as above, but withdraws rather than deposits)
+      - Balance (Shows the current balance of the account)
 
-Bank Helper Methods:
-- _getAmount (sanitizes user input to try and avoid FormatExceptions due to user error)
-- _InitialBalanceCheck (lets the user dynamically (try) to add an initial balance upon account creation)
+      - Bank Helper Methods:
+        - _getAmount (sanitizes user input to try and avoid FormatExceptions due to user error)
+        - _InitialBalanceCheck (lets the user dynamically (try) to add an initial balance upon account creation)
 
-Account Methods:
-- Two Account constructors, one overrides with variable "balance" in addition to required "name"
+      - Account Methods:
+        - Two Account constructors, one overrides with variable "balance" in addition to required "name"
