@@ -5,10 +5,14 @@ namespace Bank1
     public class Bank
     {
         public string bankName { get; }
+        public List<Account> accountList { get; set; }
+
+        public static int accID;
 
         public Bank()
         {
             bankName = "EUC Syd Bank";
+            accountList = new List<Account>(); 
         }
 
         /// <summary>
@@ -47,19 +51,26 @@ namespace Bank1
                 // Create Account with initial balance:
                 finally 
                 { 
-                    newAccount = new Account(accountName, accountBalance);
+                    newAccount = new Account(accountName, accountBalance, ref accID);
+                    accountList.Add(newAccount);
+                  
+                
                 }
+                Console.WriteLine($"Account ID: {newAccount.accountNumber} created for {accountName}, with a starting balance of {accountBalance}");
+                accountList.Add(newAccount);
+                
                 return newAccount;
 
 
             }
             else
             { 
-                newAccount = new Account(accountName);
+                newAccount = new Account(accountName, ref accID);
+                Console.WriteLine($"Account (ID: {newAccount.accountNumber} created for {accountName}, with a starting balance of {accountBalance}");
                 return newAccount;
             }
 
-            Console.WriteLine($"New account created for {accountName}, with a starting balance of {accountBalance}");
+            
            
         }
 

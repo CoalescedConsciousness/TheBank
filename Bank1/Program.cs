@@ -34,6 +34,9 @@ namespace Bank1
             while (runMenu)
             {
                 Console.WriteLine("\n");
+                Console.WriteLine($"Logged in as {workingAccount.name}, ID: {workingAccount.accountNumber}.");
+                Console.WriteLine("\n");
+                Console.WriteLine("[A]: Change Account");
                 Console.WriteLine("[D]: Deposit");
                 Console.WriteLine("[W]: Withdraw");
                 Console.WriteLine("[B]: View Balance");
@@ -59,6 +62,10 @@ namespace Bank1
         /// <returns></returns>
         static bool Select(string userSelect, Account workingAccount, Bank bank)
         {
+            // A
+            if (userSelect == "A" || userSelect == "a")
+            { ChangeAccount(bank, workingAccount); return true; }
+
             // D
             if (userSelect == "D" || userSelect == "d")
             { bank.Deposit(workingAccount); return true; }
@@ -73,7 +80,16 @@ namespace Bank1
 
             else
             { return false; }
-            
+        }
+
+        static Account ChangeAccount(Bank bank, Account workingAccount)
+        {
+            Console.WriteLine(bank.accountList);
+            Console.WriteLine($"Available Accounts:\n");
+            foreach (Account acc in bank.accountList)
+
+                Console.Write($" {acc.AccountNumber}, {acc.name}");
+            return workingAccount;
         }
     }
 
