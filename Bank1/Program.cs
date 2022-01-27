@@ -6,13 +6,14 @@ using System.Text;
 public static class Globals
 {
     public static int AccID;
+    public static int ActiveAccID;
 }
 
 namespace Bank1
 {
     class Program
-    { 
-
+    {
+       
         static void Main()
         {
             Run();
@@ -25,10 +26,10 @@ namespace Bank1
         {
             Bank firstBank = new Bank();
             Console.WriteLine($"******** Velkommen til {firstBank.bankName} - Bank 1 ********* \n");
-            Account workingAccount = firstBank.CreateAccount();
+            firstBank.CreateAccount();
             Console.WriteLine("\n");
-            
-            Menu(workingAccount, firstBank);
+
+            Menu(firstBank.accountList[Globals.ActiveAccID], firstBank);
         }
 
         #region Primary Menu
@@ -40,12 +41,12 @@ namespace Bank1
         static void Menu(Account workingAccount, Bank bank)
         {
             bool runMenu = true;
-            string userSelect;
+            char userSelect;
             
             while (runMenu)
             {
-                Console.WriteLine("\n");
-                Console.WriteLine($"Logged in as {workingAccount.name}, ID: {workingAccount.accountNumber}.");
+                Console.Clear();
+                Console.WriteLine($"Logged in as {bank.accountList[Globals.ActiveAccID].Name}, ID: {bank.accountList[Globals.ActiveAccID].AccountNumber}.");
                 Console.WriteLine("\n");
                 Console.WriteLine("[A]: Account Management");
                 Console.WriteLine("[B]: Bank Management");
@@ -53,11 +54,10 @@ namespace Bank1
                 Console.WriteLine("[X]: Exit");
                 Console.WriteLine("\n");
                 /// User selection:
-                userSelect = Console.ReadLine();
-                Console.WriteLine(userSelect);
-
+                userSelect = Console.ReadKey().KeyChar;
+                
                 // Bit messy, but select function calls the function and returns a bool to justify whether the operation should continue or not.
-                runMenu = Select(userSelect, workingAccount, bank);
+                runMenu = Select(userSelect, bank.accountList[Globals.ActiveAccID], bank);
                 
             }
         }
@@ -69,18 +69,21 @@ namespace Bank1
         /// <param name="workingAccount"></param>
         /// <param name="bank"></param>
         /// <returns></returns>
-        static bool Select(string userSelect, Account workingAccount, Bank bank)
+        static bool Select(char userSelect, Account workingAccount, Bank bank)
         {
             // A
-            if (userSelect == "A" || userSelect == "a")
-            { AccMenu(workingAccount, bank); return true; }
+            if (QuickResponse("A", userSelect))
+            { AccMenu(bank.accountList[Globals.ActiveAccID], bank); return true; }
 
             // B
-            if (userSelect == "B" || userSelect == "b")
-            { BankMenu(workingAccount, bank); return true; }
+            if (QuickResponse("B", userSelect))
+            { BankMenu(bank.accountList[Globals.ActiveAccID], bank); return true; }
 
             else
-            { return false; }
+            {
+                MsgBuffer();
+                return false;
+            }
         }
         #endregion
 
@@ -88,7 +91,7 @@ namespace Bank1
         static void AccMenu(Account workingAccount, Bank bank)
         {
             bool runMenu = true;
-            string userSelect;
+            char userSelect;
 
             while (runMenu)
             {
@@ -99,36 +102,49 @@ namespace Bank1
                 Console.WriteLine("[W]: Withdraw");
                 Console.WriteLine("[B]: View Balance");
                 Console.WriteLine("---");
-                Console.WriteLine("[X]: Exit");
+                Console.WriteLine("[X]: Return");
                 Console.WriteLine("\n");
 
-                userSelect = Console.ReadLine();
-                Console.WriteLine(userSelect);
+                userSelect = Console.ReadKey().KeyChar;
 
                 // Bit messy, but select function calls the function and returns a bool to justify whether the operation should continue or not.
                 runMenu = AccSelect(userSelect, workingAccount, bank);
+             
             }
         }
-        static bool AccSelect(string userSelect, Account workingAccount, Bank bank)
+        static bool AccSelect(char userSelect, Account workingAccount, Bank bank)
         {
             // A
-            if (userSelect == "C" || userSelect == "c")
-            { bank.ChangeAccount(bank, workingAccount); return true; }
+            if (QuickResponse("C", userSelect))
+            { Globals.ActiveAccID = bank.ChangeAccount(bank, bank.accountList[Globals.ActiveAccID]); return true; }
 
             // D
-            if (userSelect == "D" || userSelect == "d")
-            { bank.Deposit(workingAccount); return true; }
+            if (QuickResponse("D", userSelect))
+            { bank.Deposit(bank.accountList[Globals.ActiveAccID]); return true; }
 
             // W
-            if (userSelect == "W" || userSelect == "w")
-            { bank.Withdraw(workingAccount); return true; }
+            if (QuickResponse("W", userSelect))
+            { 
+                try 
+                {
+                    bank.Withdraw(bank.accountList[Globals.ActiveAccID]);
+                }
+                catch(OverdraftException e)
+                {
+                    Console.WriteLine(e);
+                }
+                return true; 
+            }
 
             // B
-            if (userSelect == "B" || userSelect == "b")
-            { bank.Balance(workingAccount); return true; }
+            if (QuickResponse("B", userSelect))
+            { bank.Balance(bank.accountList[Globals.ActiveAccID]); return true; }
 
             else
-            { return false; }
+            {
+                MsgBuffer();
+                return false;
+            }
         }
         #endregion
 
@@ -136,30 +152,30 @@ namespace Bank1
         static void BankMenu(Account workingAccount, Bank bank)
         {
             bool runMenu = true;
-            string userSelect;
+            char userSelect;
 
             while (runMenu)
             {
                 Console.Clear();
-                Console.WriteLine("[[ Account Management ]]");
+                Console.WriteLine("[[ Bank Management ]]");
                 Console.WriteLine("[A]: Create Account");
-                Console.WriteLine("[B]: View Balance");
+                Console.WriteLine("[B]: View Bank Balance");
                 Console.WriteLine("[C]: Charge Interest");
                 Console.WriteLine("---");
                 Console.WriteLine("[X]: Return");
                 Console.WriteLine("\n");
 
-                userSelect = Console.ReadLine();
-                Console.WriteLine(userSelect);
+                userSelect = Console.ReadKey().KeyChar;
 
                 // Bit messy, but select function calls the function and returns a bool to justify whether the operation should continue or not.
                 runMenu = BankSelect(userSelect, workingAccount, bank);
+          
             }
         }
-        static bool BankSelect(string userSelect, Account workingAccount, Bank bank)
+        static bool BankSelect(char userSelect, Account workingAccount, Bank bank)
         {
             // A
-            if (userSelect == "A" || userSelect == "a")
+            if (QuickResponse("A", userSelect))
             {
                 Console.Clear();
                 Console.WriteLine("[[ Select Account Type ]]");
@@ -171,14 +187,34 @@ namespace Bank1
                 bank.CreateAccount(userInput); return true; }
 
             // D
-            if (userSelect == "D" || userSelect == "d")
+            if (QuickResponse("D", userSelect))
             { bank.BankBalance(bank); return true; }
 
             // C
-            if (userSelect == "C" || userSelect == "c")
+            if (QuickResponse("C", userSelect))
             { bank.ChargeInterest(bank); return true; }
             else
-            { return false; }
+            { MsgBuffer(); 
+             return false; }
+        }
+        #endregion
+
+        #region Helper methods
+        /// <summary>
+        /// Method that simply translates char keypresses to text mappings.
+        /// </summary>
+        /// <param name="letter"></param>
+        /// <param name="reply"></param>
+        /// <returns></returns>
+        static bool QuickResponse(string letter, char reply)
+        {
+            return (reply == char.Parse(letter.ToUpper()) || reply == char.Parse(letter.ToLower())) ? true : false;
+        }
+
+        static void MsgBuffer()
+        {
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadKey();
         }
         #endregion
     }

@@ -6,24 +6,39 @@ namespace Bank1
     public abstract class Account
     {
         // Fields:
-        public abstract string name { get; set; }
-        public abstract decimal balance { get; set; }
-        public abstract int accountNumber { get; }
+        public abstract string Name { get; set; }
+        public abstract decimal Balance { get; set; }
+        public abstract int AccountNumber { get; }
+     
+        
 
-        internal abstract DateTime interestDate { get; set; }
-        internal abstract bool interestApplied { get; set; }
+        internal abstract DateTime InterestDate { get; set; }
+        internal abstract bool InterestApplied { get; set; }
         // Methods
         public abstract void ChargeInterest();
     }
     public class CheckingAccount : Account
     {
-        public override string name { get; set; }
-        public override decimal balance { get; set; }
+        decimal _balance;
 
-        public override int accountNumber { get; }
+        public override string Name { get; set; }
+        
+        public override decimal Balance
+        {
+            get => _balance;
+            set
+            {
+                if (value < 0)
+                {
+                    throw new OverdraftException(Name, AccountNumber);
+                }
+            }
+        }
 
-        internal override DateTime interestDate { get; set; }
-        internal override bool interestApplied { get; set; }
+        public override int AccountNumber { get; }
+
+        internal override DateTime InterestDate { get; set; }
+        internal override bool InterestApplied { get; set; }
 
         #region CRUD
         /// <summary>
@@ -31,70 +46,81 @@ namespace Bank1
         /// </summary>
         /// <param name="name"></param>
         /// <param name="balance"></param>
-        public CheckingAccount(string name, decimal balance, ref int id)
+        public CheckingAccount(string name, decimal balance)
         {
-            this.name = name;
-            this.balance = balance;
-            accountNumber = id;
-            id++;
+            this.Name = name;
+            this.Balance = balance;
+            AccountNumber = Globals.AccID;
+            Globals.AccID++;
         }
 
         /// <summary>
         /// Standard [C]RUD creation, only needing name.
         /// </summary>
         /// <param name="name"></param>
-        public CheckingAccount(string name, ref int id)
+        public CheckingAccount(string name)
         {
-            this.name = name;
-            accountNumber = id;
-            id++;
+            this.Name = name;
+            AccountNumber = Globals.AccID;
+            Globals.AccID++;
         }
         #endregion
 
         public override void ChargeInterest()
         {
-            if (interestDate > DateTime.Now.AddYears(-1))
+            if (InterestDate > DateTime.Now.AddYears(-1))
             {
-                if (!interestApplied)
+                if (!InterestApplied)
                 {
-                    balance = (decimal)(float.Parse(s: balance.ToString()) * 1.005);
-                    interestApplied = true;
+                    Balance = (decimal)(float.Parse(s: Balance.ToString()) * 1.005);
+                    InterestApplied = true;
                 }
             }
         }
     }
     public class SavingsAccount : Account
     {
-        public override string name { get; set; }
-        public override decimal balance { get; set; }
+        decimal _balance;
+        public override string Name { get; set; }
+        public override decimal Balance
+        {
+            get => _balance;
+            set
+            {
+                if (value < 0)
+                {
+                    throw new OverdraftException(Name, AccountNumber);
+                }
+            }
+        }
 
-        public override int accountNumber { get; }
+        public override int AccountNumber { get; }
 
-        internal override DateTime interestDate { get; set; }
-        internal override bool interestApplied { get; set; }
+        internal override DateTime InterestDate { get; set; }
+        internal override bool InterestApplied { get; set; }
         #region CRUD
         /// <summary>
         /// [C]RUD Overload with name and balance.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="balance"></param>
-        public SavingsAccount(string name, decimal balance, ref int id)
+        public SavingsAccount(string name, decimal balance)
         {
-            this.name = name;
-            this.balance = balance;
-            accountNumber = id;
-            id++;
+            this.Name = name;
+            this.Balance = balance;
+            AccountNumber = Globals.AccID;
+            Globals.AccID++;
         }
 
         /// <summary>
         /// Standard [C]RUD creation, only needing name.
         /// </summary>
         /// <param name="name"></param>
-        public SavingsAccount(string name, ref int id)
+        public SavingsAccount(string name)
         {
-            this.name = name;
-            accountNumber = id;
-            id++;
+            this.Name = name;
+            AccountNumber = Globals.AccID;
+            Globals.AccID++;
         }
         #endregion
 
@@ -105,36 +131,47 @@ namespace Bank1
         /// </summary>
         public override void ChargeInterest()
         {
-            if (interestDate > DateTime.Now.AddYears(-1))
+            if (InterestDate > DateTime.Now.AddYears(-1))
             {
-                if (!interestApplied)
+                if (!InterestApplied)
                 {
-                    if (balance <= 50000)
+                    if (Balance <= 50000)
                     {
-                        balance = (decimal)(float.Parse(s: balance.ToString()) * 1.01);
+                        Balance = (decimal)(float.Parse(s: Balance.ToString()) * 1.01);
                     }
-                    if (50000 < balance && balance <= 100000)
+                    if (50000 < Balance && Balance <= 100000)
                     {
-                        balance = (decimal)(float.Parse(s: balance.ToString()) * 1.02);
+                        Balance = (decimal)(float.Parse(s: Balance.ToString()) * 1.02);
                     }
-                    if (balance > 100000)
+                    if (Balance > 100000)
                     {
-                        balance = (decimal)(float.Parse(s: balance.ToString()) * 1.03);
+                        Balance = (decimal)(float.Parse(s: Balance.ToString()) * 1.03);
                     }
-                    interestApplied = true;
+                    InterestApplied = true;
                 }
             }
         }
     }
     public class MasterCardAccount : Account
     {
-        public override string name { get; set; }
-        public override decimal balance { get; set; }
+        decimal _balance;
+        public override string Name { get; set; }
+        public override decimal Balance
+        {
+            get => _balance;
+            set
+            {
+                if (value < 0)
+                {
+                    throw new OverdraftException(Name, AccountNumber);
+                }
+            }
+        }
 
-        public override int accountNumber { get; }
+        public override int AccountNumber { get; }
 
-        internal override DateTime interestDate { get; set; }
-        internal override bool interestApplied { get; set; }
+        internal override DateTime InterestDate { get; set; }
+        internal override bool InterestApplied { get; set; }
 
         #region CRUD
         /// <summary>
@@ -142,23 +179,23 @@ namespace Bank1
         /// </summary>
         /// <param name="name"></param>
         /// <param name="balance"></param>
-        public MasterCardAccount(string name, decimal balance, ref int id)
+        public MasterCardAccount(string name, decimal balance)
         {
-            this.name = name;
-            this.balance = balance;
-            accountNumber = id;
-            id++;
+            this.Name = name;
+            this.Balance = balance;
+            AccountNumber = Globals.AccID;
+            Globals.AccID++;
         }
 
         /// <summary>
         /// Standard [C]RUD creation, only needing name.
         /// </summary>
         /// <param name="name"></param>
-        public MasterCardAccount(string name, ref int id)
+        public MasterCardAccount(string name)
         {
-            this.name = name;
-            accountNumber = id;
-            id++;
+            this.Name = name;
+            AccountNumber = Globals.AccID;
+            Globals.AccID++;
         }
         #endregion
 
@@ -168,17 +205,17 @@ namespace Bank1
         /// </summary>
         public override void ChargeInterest()
         {
-            if (interestDate > DateTime.Now.AddYears(-1))
+            if (InterestDate > DateTime.Now.AddYears(-1))
             {
-                if (!interestApplied)
+                if (!InterestApplied)
                 {
-                    if (balance >= 0)
+                    if (Balance >= 0)
                     {
-                        balance = (decimal)(float.Parse(s: balance.ToString()) * 1.001);
+                        Balance = (decimal)(float.Parse(s: Balance.ToString()) * 1.001);
                     }
                     else
                     {
-                        balance = (decimal)(float.Parse(s: balance.ToString()) * 1.2);
+                        Balance = (decimal)(float.Parse(s: Balance.ToString()) * 1.2);
                     }
                 }
             }

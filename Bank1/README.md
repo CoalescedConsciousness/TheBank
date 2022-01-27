@@ -1,6 +1,11 @@
 ﻿### Bank Application
 
 ## Changelog
+- [0.0.3]
+  - Added some exception handling
+  - Refactored some code to allow for a smoother user experience
+  - Refactored account handling so this more dynamically interacts with account list
+
 - [0.0.2]
   - Extended methods and added Account management functionality.
     - Note that the ability to deposit/withdraw/show balance for designated accounts have been substituted with simply using the currently active account.

@@ -21,7 +21,7 @@ namespace Bank1
             decimal total = 0;
             foreach (Account x in accountList)
             {
-                total += x.balance;
+                total += x.Balance;
             }
             Console.WriteLine($"Total Bank Balance: {total}");
         }
@@ -46,15 +46,15 @@ namespace Bank1
         {
             decimal deposit = 0;
             
-            decimal init = workingAccount.balance;
+            decimal init = workingAccount.Balance;
             Console.WriteLine("Please designate the amount you wish to deposit: ");
             string input = Console.ReadLine();
 
             deposit = _getAmount(input);
 
-            workingAccount.balance += deposit;
+            workingAccount.Balance += deposit;
 
-            Console.WriteLine($"Account belonging to {workingAccount.name} added {deposit} to {init}.. Current balance = {workingAccount.balance}");
+            Console.WriteLine($"Account belonging to {workingAccount.Name} added {deposit} to {init}.. Current balance = {workingAccount.Balance}");
 
         }
 
@@ -65,16 +65,15 @@ namespace Bank1
         public void Withdraw(Account workingAccount)
         {
             decimal withdrawal = 0;
-            decimal init = workingAccount.balance;
+            decimal init = workingAccount.Balance;
             Console.WriteLine("Please designate the amount you wish to deposit: ");
             string input = Console.ReadLine();
 
             withdrawal = _getAmount(input);
 
-            workingAccount.balance -= withdrawal;
+            workingAccount.Balance -= withdrawal;
 
-            Console.WriteLine($"Account belonging to {workingAccount.name} subtracted {withdrawal} to {init}.. Current balance = {workingAccount.balance}");
-
+            Console.WriteLine($"Account belonging to {workingAccount.Name} subtracted {withdrawal} to {init}.. Current balance = {workingAccount.Balance}");
         }
 
         /// <summary>
@@ -83,7 +82,7 @@ namespace Bank1
         /// <param name="workingAccount"></param>
         public void Balance(Account workingAccount)
         {
-            Console.WriteLine($"Your balance is currently: {workingAccount.balance}");
+            Console.WriteLine($"Your balance is currently: {workingAccount.Balance}");
         }
         #endregion
 
@@ -124,21 +123,21 @@ namespace Bank1
                 // Create Account with initial balance:
                 finally
                 {
-                    newAccount = _CreateAccount(accType, accountName, accountBalance, ref Globals.AccID);
+                    newAccount = _CreateAccount(accType, accountName, accountBalance);
                     accountList.Add(newAccount);
 
 
                 }
-                Console.WriteLine($"Account ID: {newAccount.accountNumber} created for {accountName}, with a starting balance of {accountBalance}");
+                Console.WriteLine($"Account ID: {newAccount.AccountNumber} created for {accountName}, with a starting balance of {accountBalance}");
                 return newAccount;
 
 
             }
             else
             {
-                newAccount = _CreateAccount(accType, accountName, accountBalance, ref Globals.AccID);
+                newAccount = _CreateAccount(accType, accountName, accountBalance);
                 accountList.Add(newAccount);
-                Console.WriteLine($"Account (ID: {newAccount.accountNumber} created for {accountName}, with a starting balance of {accountBalance}");
+                Console.WriteLine($"Account (ID: {newAccount.AccountNumber} created for {accountName}, with a starting balance of {accountBalance}");
                 return newAccount;
             }
 
@@ -152,7 +151,7 @@ namespace Bank1
         /// <param name="bank"></param>
         /// <param name="workingAccount"></param>
         /// <returns></returns>
-        public Account ChangeAccount(Bank bank, Account workingAccount)
+        public int ChangeAccount(Bank bank, Account workingAccount)
         {
             Console.WriteLine(bank.accountList);
             Console.WriteLine($"Available Accounts:");
@@ -160,7 +159,7 @@ namespace Bank1
             Console.WriteLine("[[ Account ID // Holder Name ]]");
             foreach (Account acc in bank.accountList)
 
-                Console.WriteLine($"-- {acc.accountNumber} // {acc.name}");
+                Console.WriteLine($"-- {acc.AccountNumber} // {acc.Name}");
 
             Console.WriteLine("\nPlease select the account you wish to log in to:");
 
@@ -172,17 +171,17 @@ namespace Bank1
                 if (int.TryParse(userSelection, out index))
                 {
 
-                    if (bank.accountList.Any(acc => acc.accountNumber == index))
+                    if (bank.accountList.Any(acc => acc.AccountNumber == index))
                     {
-                        workingAccount = (Account)bank.accountList.Find(acc => acc.accountNumber == index);
                         validSelect = true;
                     }
                     else { Console.WriteLine("Account not found. Please try again."); }
                 }
                 else { Console.WriteLine("Input is not an integer. Please refer to the account ID's."); }
             }
+            Console.WriteLine("Account changed...");
 
-            return workingAccount;
+            return index;
         }
 
         #endregion
@@ -197,21 +196,21 @@ namespace Bank1
         /// <param name="accountBalance"></param>
         /// <param name="ID"></param>
         /// <returns></returns>
-        private Account _CreateAccount(string accType, string accountName, decimal accountBalance, ref int ID)
+        private Account _CreateAccount(string accType, string accountName, decimal accountBalance)
         {
 
             Account newAccount;
             if (accType == "check")
             {
-                newAccount = new CheckingAccount(accountName, accountBalance, ref Globals.AccID);
+                newAccount = new CheckingAccount(accountName, accountBalance);
             }
-            if (accType == "saving")
+            else if (accType == "saving")
             {
-                newAccount = new SavingsAccount(accountName, accountBalance, ref Globals.AccID);
+                newAccount = new SavingsAccount(accountName, accountBalance);
             }
             else  // The string will default to "cons", but using else here so there will never be a risk of returning a false value, such as in case of user-error.
             {
-                newAccount = new MasterCardAccount(accountName, accountBalance, ref Globals.AccID);
+                newAccount = new MasterCardAccount(accountName, accountBalance);
             }
             return newAccount;
         }
@@ -264,6 +263,8 @@ namespace Bank1
             if (reply == char.Parse("Y") || reply == char.Parse("y")) { return true; }
             else return false;
         }
+
+        
         #endregion
     }
 
