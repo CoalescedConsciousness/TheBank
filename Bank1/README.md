@@ -1,6 +1,12 @@
 ﻿### Bank Application
 
 ## Changelog
+- [0.0.2]
+  - Extended methods and added Account management functionality.
+    - Note that the ability to deposit/withdraw/show balance for designated accounts have been substituted with simply using the currently active account.
+  - Expanded Account based on Abstract Account class to 3 subtypes. Added interest rates for each, as well as iteration on these in Bank class.
+  
+
 - [0.0.1]
   - Added Classes: Program, Bank and Account
 

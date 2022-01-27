@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+public static class Globals
+{
+    public static int AccID;
+}
 
 namespace Bank1
 {
     class Program
     { 
+
         static void Main()
         {
             Run();
@@ -26,6 +31,12 @@ namespace Bank1
             Menu(workingAccount, firstBank);
         }
 
+        #region Primary Menu
+        /// <summary>
+        /// Menu function; simply there to give an overview of available user actions, and send the selection to processing in Select()
+        /// </summary>
+        /// <param name="workingAccount"></param>
+        /// <param name="bank"></param>
         static void Menu(Account workingAccount, Bank bank)
         {
             bool runMenu = true;
@@ -36,10 +47,8 @@ namespace Bank1
                 Console.WriteLine("\n");
                 Console.WriteLine($"Logged in as {workingAccount.name}, ID: {workingAccount.accountNumber}.");
                 Console.WriteLine("\n");
-                Console.WriteLine("[A]: Change Account");
-                Console.WriteLine("[D]: Deposit");
-                Console.WriteLine("[W]: Withdraw");
-                Console.WriteLine("[B]: View Balance");
+                Console.WriteLine("[A]: Account Management");
+                Console.WriteLine("[B]: Bank Management");
                 Console.WriteLine("---");
                 Console.WriteLine("[X]: Exit");
                 Console.WriteLine("\n");
@@ -64,7 +73,47 @@ namespace Bank1
         {
             // A
             if (userSelect == "A" || userSelect == "a")
-            { ChangeAccount(bank, workingAccount); return true; }
+            { AccMenu(workingAccount, bank); return true; }
+
+            // B
+            if (userSelect == "B" || userSelect == "b")
+            { BankMenu(workingAccount, bank); return true; }
+
+            else
+            { return false; }
+        }
+        #endregion
+
+        #region Account-centric Menu
+        static void AccMenu(Account workingAccount, Bank bank)
+        {
+            bool runMenu = true;
+            string userSelect;
+
+            while (runMenu)
+            {
+                Console.Clear();
+                Console.WriteLine("[[ Account Management ]]");
+                Console.WriteLine("[C]: Change Account");
+                Console.WriteLine("[D]: Deposit");
+                Console.WriteLine("[W]: Withdraw");
+                Console.WriteLine("[B]: View Balance");
+                Console.WriteLine("---");
+                Console.WriteLine("[X]: Exit");
+                Console.WriteLine("\n");
+
+                userSelect = Console.ReadLine();
+                Console.WriteLine(userSelect);
+
+                // Bit messy, but select function calls the function and returns a bool to justify whether the operation should continue or not.
+                runMenu = AccSelect(userSelect, workingAccount, bank);
+            }
+        }
+        static bool AccSelect(string userSelect, Account workingAccount, Bank bank)
+        {
+            // A
+            if (userSelect == "C" || userSelect == "c")
+            { bank.ChangeAccount(bank, workingAccount); return true; }
 
             // D
             if (userSelect == "D" || userSelect == "d")
@@ -81,16 +130,57 @@ namespace Bank1
             else
             { return false; }
         }
+        #endregion
 
-        static Account ChangeAccount(Bank bank, Account workingAccount)
+        #region Bank-centric Menu
+        static void BankMenu(Account workingAccount, Bank bank)
         {
-            Console.WriteLine(bank.accountList);
-            Console.WriteLine($"Available Accounts:\n");
-            foreach (Account acc in bank.accountList)
+            bool runMenu = true;
+            string userSelect;
 
-                Console.Write($" {acc.AccountNumber}, {acc.name}");
-            return workingAccount;
+            while (runMenu)
+            {
+                Console.Clear();
+                Console.WriteLine("[[ Account Management ]]");
+                Console.WriteLine("[A]: Create Account");
+                Console.WriteLine("[B]: View Balance");
+                Console.WriteLine("[C]: Charge Interest");
+                Console.WriteLine("---");
+                Console.WriteLine("[X]: Return");
+                Console.WriteLine("\n");
+
+                userSelect = Console.ReadLine();
+                Console.WriteLine(userSelect);
+
+                // Bit messy, but select function calls the function and returns a bool to justify whether the operation should continue or not.
+                runMenu = BankSelect(userSelect, workingAccount, bank);
+            }
         }
+        static bool BankSelect(string userSelect, Account workingAccount, Bank bank)
+        {
+            // A
+            if (userSelect == "A" || userSelect == "a")
+            {
+                Console.Clear();
+                Console.WriteLine("[[ Select Account Type ]]");
+                Console.WriteLine("check == Checking account");
+                Console.WriteLine("save == Savings account");
+                Console.WriteLine("cons or nothing == MasterCard Account");
+                string userInput = Console.ReadLine();
+                
+                bank.CreateAccount(userInput); return true; }
+
+            // D
+            if (userSelect == "D" || userSelect == "d")
+            { bank.BankBalance(bank); return true; }
+
+            // C
+            if (userSelect == "C" || userSelect == "c")
+            { bank.ChargeInterest(bank); return true; }
+            else
+            { return false; }
+        }
+        #endregion
     }
 
 }
