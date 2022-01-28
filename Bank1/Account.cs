@@ -32,6 +32,7 @@ namespace Bank1
                 {
                     throw new OverdraftException(Name, AccountNumber);
                 }
+                _balance = value;
             }
         }
 

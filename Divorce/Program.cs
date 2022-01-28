@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
+using Bank1;
 public static class Globals
 {
     public static int AccID;
     public static int ActiveAccID;
 }
 
-namespace Bank1
+namespace BankClassLibrary
 {
     class Program
     {
-       
+
         static void Main()
         {
             Run();
@@ -25,10 +22,8 @@ namespace Bank1
         static void Run()
         {
             Bank firstBank = new Bank();
-            FileRepository fileRepo = new FileRepository();
             Console.WriteLine($"******** Velkommen til {firstBank.bankName} - Bank 1 ********* \n");
-            Account acc = firstBank.CreateAccount();
-            fileRepo.AddAccount(acc);
+            firstBank.fileRepository.AddAccount(firstBank.CreateAccount());
             Console.WriteLine("\n");
 
             Menu(firstBank.accountList[Globals.ActiveAccID], firstBank);
@@ -44,12 +39,11 @@ namespace Bank1
         {
             bool runMenu = true;
             char userSelect;
-            
+
             while (runMenu)
             {
                 MsgBuffer();
                 Console.WriteLine($"Logged in as {bank.accountList[Globals.ActiveAccID].Name}, ID: {bank.accountList[Globals.ActiveAccID].AccountNumber}.");
-                Console.WriteLine("\n");
                 Console.WriteLine("[A]: Account Management");
                 Console.WriteLine("[B]: Bank Management");
                 Console.WriteLine("---");
@@ -57,10 +51,10 @@ namespace Bank1
                 Console.WriteLine("\n");
                 /// User selection:
                 userSelect = Console.ReadKey().KeyChar;
-                
+
                 // Bit messy, but select function calls the function and returns a bool to justify whether the operation should continue or not.
                 runMenu = Select(userSelect, bank.accountList[Globals.ActiveAccID], bank);
-                
+
             }
         }
 
@@ -98,7 +92,7 @@ namespace Bank1
 
             while (runMenu)
             {
-                Console.Clear();
+                MsgBuffer();
                 Console.WriteLine("[[ Account Management ]]");
                 Console.WriteLine("[C]: Change Account");
                 Console.WriteLine("[D]: Deposit");
@@ -109,10 +103,10 @@ namespace Bank1
                 Console.WriteLine("\n");
 
                 userSelect = Console.ReadKey().KeyChar;
-                
+
                 // Bit messy, but select function calls the function and returns a bool to justify whether the operation should continue or not.
                 runMenu = AccSelect(userSelect, workingAccount, bank);
-             
+
             }
         }
         static bool AccSelect(char userSelect, Account workingAccount, Bank bank)
@@ -120,30 +114,30 @@ namespace Bank1
             Console.Clear();
             // A
             if (QuickResponse("C", userSelect))
-            { Globals.ActiveAccID = bank.ChangeAccount(bank, bank.accountList[Globals.ActiveAccID]); MsgBuffer(); return true; }
+            { Globals.ActiveAccID = bank.ChangeAccount(bank, bank.accountList[Globals.ActiveAccID]); MsgBuffer();  return true; }
 
             // D
             if (QuickResponse("D", userSelect))
-            { bank.Deposit(bank.accountList[Globals.ActiveAccID]); MsgBuffer(); return true; }
+            { bank.Deposit(bank.accountList[Globals.ActiveAccID]); return true; }
 
             // W
             if (QuickResponse("W", userSelect))
-            { 
-                try 
+            {
+                try
                 {
                     bank.Withdraw(bank.accountList[Globals.ActiveAccID]);
                 }
-                catch(OverdraftException e)
+                catch (OverdraftException e)
                 {
                     Console.WriteLine(e);
                     Console.ReadKey();
                 }
-                return true; 
+                return true;
             }
 
             // B
             if (QuickResponse("B", userSelect))
-            { bank.Balance(bank.accountList[Globals.ActiveAccID]); MsgBuffer(); return true; }
+            { bank.Balance(bank.accountList[Globals.ActiveAccID]); return true; }
 
             else
             {
@@ -161,7 +155,6 @@ namespace Bank1
 
             while (runMenu)
             {
-                Console.Clear();
                 Console.WriteLine("[[ Bank Management ]]");
                 Console.WriteLine("[A]: Create Account");
                 Console.WriteLine("[B]: View Bank Balance");
@@ -175,7 +168,7 @@ namespace Bank1
 
                 // Bit messy, but select function calls the function and returns a bool to justify whether the operation should continue or not.
                 runMenu = BankSelect(userSelect, workingAccount, bank);
-          
+
             }
         }
         static bool BankSelect(char userSelect, Account workingAccount, Bank bank)
@@ -189,23 +182,22 @@ namespace Bank1
                 Console.WriteLine("save == Savings account");
                 Console.WriteLine("cons or nothing == MasterCard Account");
                 string userInput = Console.ReadLine();
-                
+
                 bank.fileRepository.AddAccount(bank.CreateAccount(userInput));
 
-                MsgBuffer();
-                return true; 
+                return true;
             }
 
             // D
-            if (QuickResponse("B", userSelect))
-            { bank.BankBalance(bank); MsgBuffer(); return true; }
+            if (QuickResponse("D", userSelect))
+            { bank.BankBalance(bank); return true; }
 
             // C
             if (QuickResponse("C", userSelect))
-            { bank.ChargeInterest(bank); MsgBuffer(); return true; }
+            { bank.ChargeInterest(bank); return true; }
 
             if (QuickResponse("G", userSelect))
-            { Console.WriteLine(FileLogger.ReadFromLog()); MsgBuffer(); return true; } 
+            { Console.WriteLine(FileLogger.ReadFromLog()); return true; }
 
             else
             { return false; }

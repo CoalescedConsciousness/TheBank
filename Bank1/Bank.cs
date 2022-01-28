@@ -22,11 +22,12 @@ namespace Bank1
         public void BankBalance(Bank bank)
         {
             decimal total = 0;
-            foreach (Account x in accountList)
+            foreach (Account x in bank.fileRepository.accountList)
             {
                 total += x.Balance;
             }
             Console.WriteLine($"Total Bank Balance: {total}");
+            Console.ReadKey();
         }
         
         public void ChargeInterest(Bank bank)
@@ -71,7 +72,7 @@ namespace Bank1
         {
             decimal withdrawal = 0;
             decimal init = workingAccount.Balance;
-            Console.WriteLine("Please designate the amount you wish to deposit: ");
+            Console.WriteLine("Please designate the amount you wish to withdraw: ");
             string input = Console.ReadLine();
 
             withdrawal = _getAmount(input);
@@ -147,7 +148,7 @@ namespace Bank1
                 accountList.Add(newAccount);
                 string logMsg = $"Account ID: {newAccount.AccountNumber} created for {accountName}, with a starting balance of {accountBalance}";
                 FileLogger.WriteToLog(logMsg);
-                Console.WriteLine(logMsg);
+                Console.WriteLine(logMsg);            
                 return newAccount;
             }
 
@@ -163,7 +164,6 @@ namespace Bank1
         /// <returns></returns>
         public int ChangeAccount(Bank bank, Account workingAccount)
         {
-            Console.WriteLine(bank.accountList);
             Console.WriteLine($"Available Accounts:");
             Console.WriteLine("-------------------");
             Console.WriteLine("[[ Account ID // Holder Name ]]");

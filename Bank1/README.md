@@ -1,6 +1,9 @@
 ﻿### Bank Application
 
 ## Changelog
+- [0.1.0] "Post-Presentation"
+  - State in which the project was presented.
+
 - [0.0.3]
   - Added some exception handling
   - Refactored some code to allow for a smoother user experience

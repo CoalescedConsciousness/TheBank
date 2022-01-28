@@ -4,24 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bank1
+namespace BankClassLibrary
 {
     public class FileRepository : IFileRepository
     {
         public const string fileName = "data.txt";
 
-        public List<Account> accountList { get; set; } = new List<Account>();
+        public List<Account> accountList { get; set; }
 
         public static int accID;
 
         public FileRepository()
         {
-            List<Account> accountList = new List<Account>();
+            List<Account> accList = new List<Account>();
         }
 
         public int AddAccount(Account account)
         {
-            
             accountList.Add(account);
             accID++;
             return account.AccountNumber;
@@ -49,7 +48,7 @@ namespace Bank1
                 File.Create(fileName);
             }
 
-            string[] data = File.ReadAllLines(fileName);
+            string[] data = default;
             foreach (Account x in accountList)
             {
                 List<string> accData = new List<string>() { x.AccountNumber.ToString(), x.Name, x.Balance.ToString(), x.InterestApplied.ToString(), x.InterestDate.ToString() };
