@@ -7,12 +7,15 @@ namespace Bank1
         public string bankName { get; }
         public List<Account> accountList { get; set; }
 
+        public FileRepository fileRepository { get; set; }
+
         public static int accID;
 
         public Bank()
         {
             bankName = "EUC Syd Bank";
             accountList = new List<Account>();
+            fileRepository = new FileRepository();
         }
 
         #region Bank Management
@@ -31,6 +34,7 @@ namespace Bank1
             foreach (Account x in accountList)
             {
                 x.ChargeInterest();
+                FileLogger.WriteToLog("Interest applied.. How'u'doin'?");
             }
         }
         #endregion
@@ -54,8 +58,9 @@ namespace Bank1
 
             workingAccount.Balance += deposit;
 
-            Console.WriteLine($"Account belonging to {workingAccount.Name} added {deposit} to {init}.. Current balance = {workingAccount.Balance}");
-
+            string logMsg = $"Account belonging to {workingAccount.Name} added {deposit} to {init}.. Current balance = {workingAccount.Balance}";
+            Console.WriteLine(logMsg);
+            FileLogger.WriteToLog(logMsg);
         }
 
         /// <summary>
@@ -72,8 +77,9 @@ namespace Bank1
             withdrawal = _getAmount(input);
 
             workingAccount.Balance -= withdrawal;
-
-            Console.WriteLine($"Account belonging to {workingAccount.Name} subtracted {withdrawal} to {init}.. Current balance = {workingAccount.Balance}");
+            string logMsg = $"Account belonging to {workingAccount.Name} subtracted {withdrawal} to {init}.. Current balance = {workingAccount.Balance}";
+            Console.WriteLine(logMsg);
+            FileLogger.WriteToLog(logMsg);
         }
 
         /// <summary>
@@ -128,7 +134,9 @@ namespace Bank1
 
 
                 }
-                Console.WriteLine($"Account ID: {newAccount.AccountNumber} created for {accountName}, with a starting balance of {accountBalance}");
+                string logMsg = $"Account ID: {newAccount.AccountNumber} created for {accountName}, with a starting balance of {accountBalance}";
+                FileLogger.WriteToLog(logMsg);
+                Console.WriteLine(logMsg);
                 return newAccount;
 
 
@@ -137,7 +145,9 @@ namespace Bank1
             {
                 newAccount = _CreateAccount(accType, accountName, accountBalance);
                 accountList.Add(newAccount);
-                Console.WriteLine($"Account (ID: {newAccount.AccountNumber} created for {accountName}, with a starting balance of {accountBalance}");
+                string logMsg = $"Account ID: {newAccount.AccountNumber} created for {accountName}, with a starting balance of {accountBalance}";
+                FileLogger.WriteToLog(logMsg);
+                Console.WriteLine(logMsg);
                 return newAccount;
             }
 
