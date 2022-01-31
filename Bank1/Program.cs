@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public static class Globals
+static class Globals
 {
     public static int AccID;
     public static int ActiveAccID;
@@ -11,6 +11,8 @@ public static class Globals
 
 namespace Bank1
 {
+    using Account = Account.Account;
+
     class Program
     {
        

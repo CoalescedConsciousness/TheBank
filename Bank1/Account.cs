@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 
-namespace Bank1
+
+namespace Account
 {
     public abstract class Account
     {

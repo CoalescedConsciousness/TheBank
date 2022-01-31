@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using IBank1;
 
 namespace Bank1
 {
-    public class FileRepository : IFileRepository
+    using Account = Account.Account;
+
+    public class FileRepository : IBank1.IFileRepository
     {
         public const string fileName = "data.txt";
 

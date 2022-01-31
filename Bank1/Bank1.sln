@@ -5,9 +5,11 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bank1", "Bank1.csproj", "{64A5817B-04F8-4302-A3CF-1E051AD68016}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Divorce", "..\Divorce\Divorce.csproj", "{7DE61DD0-1759-4A41-8810-63772426A130}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Divorce", "..\Divorce\Divorce.csproj", "{7DE61DD0-1759-4A41-8810-63772426A130}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankClassLibrary", "..\BankClassLibrary\BankClassLibrary.csproj", "{5886C2BA-0AEB-4A31-A3B7-7281ABE476E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankClassLibrary", "..\BankClassLibrary\BankClassLibrary.csproj", "{5886C2BA-0AEB-4A31-A3B7-7281ABE476E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBank1", "..\TestBank1\TestBank1.csproj", "{F0C74361-C87A-4FD4-A6E7-42496B40C249}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{5886C2BA-0AEB-4A31-A3B7-7281ABE476E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5886C2BA-0AEB-4A31-A3B7-7281ABE476E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5886C2BA-0AEB-4A31-A3B7-7281ABE476E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0C74361-C87A-4FD4-A6E7-42496B40C249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0C74361-C87A-4FD4-A6E7-42496B40C249}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0C74361-C87A-4FD4-A6E7-42496B40C249}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0C74361-C87A-4FD4-A6E7-42496B40C249}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

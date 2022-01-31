@@ -8,6 +8,7 @@ public static class Globals
 
 namespace BankClassLibrary
 {
+    using Account = Account.Account;
     class Program
     {
 
@@ -128,6 +129,7 @@ namespace BankClassLibrary
                     bank.Withdraw(bank.accountList[Globals.ActiveAccID]);
                 }
                 catch (OverdraftException e)
+
                 {
                     Console.WriteLine(e);
                     Console.ReadKey();

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace Bank1
+namespace IBank1
 {
+    using Account = Account.Account;
     public interface IFileRepository
     {
+        
         int AddAccount(Account account);
         Account GetAccount(int id);
         List<Account> GetAllAccounts();
